@@ -58,6 +58,12 @@ test/
 
 NestJS conventions: modules in `*.module.ts`, controllers in `*.controller.ts`, services in `*.service.ts`, tests co-located as `*.spec.ts`.
 
+### Internal Docs
+
+Project documentation lives in `src/docs/`. When a task touches a topic covered there (setup, configuration, features, troubleshooting), read the relevant doc before implementing.
+
+→ [src/docs/README.md](src/docs/README.md) — index of all docs
+
 ### ESLint Rules of Note
 
 - `@typescript-eslint/no-explicit-any`: **error**
