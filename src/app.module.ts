@@ -2,9 +2,9 @@ import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { CacheModule } from "@nestjs/cache-manager";
-import { KeyvCacheableMemory } from "cacheable";
+// import { KeyvCacheableMemory } from "cacheable";
+// import { Keyv } from "keyv";
 import KeyvRedis from "@keyv/redis";
-import { Keyv } from "keyv";
 
 @Module({
   imports: [
@@ -12,10 +12,10 @@ import { Keyv } from "keyv";
       useFactory: () => {
         return {
           stores: [
-            new Keyv({
-              store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }),
-            }),
-            new KeyvRedis("redis://localhost:6379"),
+            // new Keyv({
+            //   store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }),
+            // }),
+            new KeyvRedis("redis://redis:6379"),
           ],
         };
       },

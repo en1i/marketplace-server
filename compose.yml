@@ -1,0 +1,7 @@
+services:
+  redis:
+    image: "redis:alpine"
+  nestjs:
+    build: .
+    ports: 
+      - "3001:3001"
