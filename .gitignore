@@ -10,11 +10,8 @@ dist/
 # IDE
 /.idea
 /.awcache
-/.vscode
-/.devcontainer
 /.classpath
 /.project
-/.settings
 *.code-workspace
 
 # Vim
@@ -45,7 +42,6 @@ yarn-error.log
 /example
 
 # tests
-/test
 /benchmarks/memory
 /coverage
 /.nyc_output

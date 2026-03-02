@@ -1,21 +1,36 @@
-# 1. Use a specific version for stability
-FROM node:24-slim
+FROM node:22-slim AS base
+WORKDIR /usr/src/app
+RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 
-# 2. Enable Corepack to ensure the correct Yarn version is used
-RUN corepack enable
-
-# 3. Create a dedicated app directory
-WORKDIR /usr/app
-
-# 4. Copy ONLY package files first (The "Cache Trick")
+FROM base AS deps
 COPY package.json yarn.lock ./
-
-# 5. Install dependencies 
-# This layer is cached unless you change package.json/yarn.lock
 RUN yarn install --frozen-lockfile
 
-# 6. Now copy the rest of your source code
-COPY . .
+FROM deps AS dev
+USER root
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends git openssh-client \
+  && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=development
+EXPOSE 3001
+USER node
+CMD ["yarn", "start:dev"]
 
-# 7. Start the app
-CMD ["yarn", "start"]
+FROM deps AS build
+COPY nest-cli.json tsconfig.json tsconfig.build.json ./
+COPY src ./src
+RUN yarn build
+
+FROM base AS production-deps
+ENV NODE_ENV=production
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production=true && yarn cache clean
+
+FROM base AS runner
+ENV NODE_ENV=production
+COPY --from=production-deps /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+COPY package.json ./
+USER node
+EXPOSE 3001
+CMD ["node", "dist/main"]
