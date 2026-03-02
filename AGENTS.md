@@ -141,7 +141,7 @@ Before completing any command/skill change, verify:
 
 **IMPORTANT**: When browser debugging is needed:
 
-1. **First, check for existing browser**: Use `tabs_context_mcp` to check if there's already a running browser with a Marketplace tab (check for `localhost:8020` URL)
+1. **First, check for existing browser**: Use `tabs_context_mcp` to check if there's already a running browser with a Marketplace tab (check for `localhost:3001` URL)
 2. **Connect automatically**: If the Marketplace tab exists, connect to it without asking the user
 3. **Ask only if needed**: Only if the tab is not found or browser is not running, ask the user to open a browser in debugging mode
 
