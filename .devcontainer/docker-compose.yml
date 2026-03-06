@@ -1,16 +1,10 @@
 services:
   marketplace-server:
-    build:
-      target: dev
-    command: yarn start:dev
     volumes:
       - .:/usr/src/app:cached
       - marketplace-server-node_modules:/usr/src/app/node_modules
       - ${HOME}/.ssh:/home/node/.ssh:ro
       - ${HOME}/.gitconfig:/home/node/.gitconfig:ro
-    environment:
-      NODE_ENV: development
-      PORT: 3001
 
   redis:
     ports:

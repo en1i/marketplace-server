@@ -119,4 +119,8 @@ For local development in VS Code Dev Containers, the project uses:
 - `DATABASE_URL`
 - `REDIS_DB_URL`
 
+`NODE_ENV` remains in `.env.dev` as the developer-edited runtime value for the app, even though the Docker `dev` stage also sets `NODE_ENV=development` as an image default.
+
+`PORT` is used by the Nest app and by `compose.dev.yml` host publishing for `marketplace-server`. When running Compose manually and you want the published host port to follow `.env.dev`, use `docker compose --env-file .env.dev -f compose.dev.yml ...` so Compose variable interpolation sees the same `PORT` value.
+
 This path is for development only and should not replace production deployment commands above.

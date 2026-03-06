@@ -1,5 +1,7 @@
 # Docs
 
+When a change touches behavior, setup, configuration, or workflow already described in this `src/docs/` section, review the affected docs and update them in the same change so they stay current.
+
 ## Setup & Configuration
 
 - [Redis Cache — in-memory L1 + Redis L2 store](./setup/redis-cache.md)
