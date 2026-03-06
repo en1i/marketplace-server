@@ -61,6 +61,7 @@ POSTGRES_PASSWORD=<password>
 ```
 
 Optional overrides:
+
 - `NODE_ENV` (defaults to `production`)
 - `POSTGRES_USER`
 - `POSTGRES_DB`
@@ -109,6 +110,7 @@ For local development in VS Code Dev Containers, the project uses:
 - [`.devcontainer/docker-compose.yml`](../../../.devcontainer/docker-compose.yml)
 
 `compose.dev.yml` loads environment values from a local `.env.dev` file. Ensure `.env.dev` exists before opening the Dev Container and includes:
+
 - `NODE_ENV`
 - `PORT`
 - `POSTGRES_USER`
