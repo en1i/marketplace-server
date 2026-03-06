@@ -3,7 +3,9 @@ WORKDIR /usr/src/app
 RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 
 FROM base AS deps
-COPY package.json yarn.lock ./
+COPY --chown=node:node package.json yarn.lock ./
+RUN chown node:node /usr/src/app
+USER node
 RUN yarn install --frozen-lockfile
 
 FROM deps AS dev

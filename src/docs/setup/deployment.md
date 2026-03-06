@@ -16,7 +16,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 ### Dockerfile (multi-stage)
 
 - `base`: Node + Corepack/Yarn bootstrap
-- `deps`: installs full dependencies
+- `deps`: installs full dependencies as the `node` user so dev-time Prisma generation can write inside `node_modules`
 - `dev`: developer image (`yarn start:dev`, git + ssh client available)
 - `build`: compiles NestJS into `dist/`
 - `production-deps`: production-only dependencies
