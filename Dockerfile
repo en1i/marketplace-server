@@ -18,8 +18,11 @@ CMD ["yarn", "start:dev"]
 
 FROM deps AS build
 COPY nest-cli.json tsconfig.json tsconfig.build.json ./
+COPY prisma.config.ts ./
 COPY src ./src
-RUN yarn build
+# Prisma client generation runs during `yarn build` (prebuild hook) and needs a build-time DATABASE_URL;
+# this placeholder is only for compile/generate and is not used as runtime database configuration.
+RUN DATABASE_URL=postgresql://localhost:5432/postgres?schema=public yarn build
 
 FROM base AS production-deps
 ENV NODE_ENV=production

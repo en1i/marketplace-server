@@ -5,11 +5,11 @@ import { CacheModule } from "@nestjs/cache-manager";
 import { KeyvCacheableMemory } from "cacheable";
 import { Keyv } from "keyv";
 import KeyvRedis from "@keyv/redis";
-
-const redisUrl = process.env.REDIS_URL ?? "redis://redis:6379";
+import { PrismaModule } from "./prisma/prisma.module";
 
 @Module({
   imports: [
+    PrismaModule,
     CacheModule.registerAsync({
       useFactory: () => {
         return {
@@ -17,7 +17,7 @@ const redisUrl = process.env.REDIS_URL ?? "redis://redis:6379";
             new Keyv({
               store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }),
             }),
-            new KeyvRedis(redisUrl),
+            new KeyvRedis(process.env.REDIS_DB_URL),
           ],
         };
       },

@@ -219,6 +219,18 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## 5. Consultative Guidance For Libraries And Patterns
+
+When the user asks to add a package/library/module, or when you notice an unusual/undocumented implementation pattern:
+
+- Act as an experienced consultant, not just an implementer.
+- Use Context7 to check official APIs and current best practices.
+- Evaluate the user-requested option and at least 1-2 relevant alternatives.
+- Provide a short project-specific comparison (pros/cons, maintenance cost, compatibility with current stack).
+- If the user-requested option is best, implement it and briefly mention alternatives considered.
+- If better options exist, explain why and wait for explicit user approval before implementing.
+- If an existing pattern appears intentional but undocumented, call out the uncertainty and ask before replacing it.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
