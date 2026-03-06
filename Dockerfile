@@ -22,7 +22,8 @@ COPY prisma.config.ts ./
 COPY src ./src
 # Prisma client generation runs during `yarn build` (prebuild hook) and needs a build-time DATABASE_URL;
 # this placeholder is only for compile/generate and is not used as runtime database configuration.
-RUN DATABASE_URL=postgresql://localhost:5432/postgres?schema=public yarn build
+ARG DATABASE_URL="postgresql://localhost:5432/postgres?schema=public"
+RUN DATABASE_URL=${DATABASE_URL} yarn build
 
 FROM base AS production-deps
 ENV NODE_ENV=production

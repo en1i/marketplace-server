@@ -17,7 +17,7 @@ import { PrismaModule } from "./prisma/prisma.module";
             new Keyv({
               store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }),
             }),
-            new KeyvRedis(process.env.REDIS_DB_URL),
+            new KeyvRedis(process.env.REDIS_DB_URL ?? "redis://redis:6379"),
           ],
         };
       },
