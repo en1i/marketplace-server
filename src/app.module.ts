@@ -5,11 +5,11 @@ import { CacheModule } from "@nestjs/cache-manager";
 import { KeyvCacheableMemory } from "cacheable";
 import { Keyv } from "keyv";
 import KeyvRedis from "@keyv/redis";
-import { PrismaModule } from "./prisma/prisma.module";
+import { DatabaseModule } from "./db/db.module";
 
 @Module({
   imports: [
-    PrismaModule,
+    DatabaseModule,
     CacheModule.registerAsync({
       useFactory: () => {
         return {

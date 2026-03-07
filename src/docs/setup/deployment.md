@@ -16,7 +16,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 ### Dockerfile (multi-stage)
 
 - `base`: Node + Corepack/Yarn bootstrap
-- `deps`: installs full dependencies as the `node` user so dev-time Prisma generation can write inside `node_modules`
+- `deps`: installs full dependencies as the `node` user
 - `dev`: developer image (`yarn start:dev`, git + ssh client available)
 - `build`: compiles NestJS into `dist/`
 - `production-deps`: production-only dependencies
@@ -33,7 +33,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 - Redis URL is configured via `REDIS_DB_URL` environment variable
 - PostgreSQL URL is configured via `DATABASE_URL` environment variable
 - Cache uses in-memory L1 + Redis L2
-- Prisma client generation is automated in execution hooks (`prebuild`, `prestart:dev`, `pretest:e2e`) to avoid clean-build/runtime failures when local generated files are absent
+- Database access uses a shared `pg` pool wrapped by Drizzle ORM; schema changes are managed through Drizzle Kit scripts
 
 ## Deploy The App (Onboarding Steps)
 
