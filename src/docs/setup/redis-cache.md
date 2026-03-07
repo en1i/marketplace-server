@@ -15,22 +15,61 @@ yarn add @nestjs/cache-manager @keyv/redis cacheable keyv
 | `cacheable` | In-memory store (`KeyvCacheableMemory`) + `Keyv` helpers |
 | `@keyv/redis` | Redis adapter for Keyv |
 
-## Configuration (`app.module.ts`)
+## Configuration
+
+Keep the cache wiring isolated in its own module so `AppModule` only imports it.
 
 ```ts
-import { CacheModule } from "@nestjs/cache-manager";
-import { KeyvCacheableMemory } from "cacheable";
+// src/cache/cache.service.ts
+import {
+  type CacheModuleOptions,
+  type CacheOptionsFactory,
+} from "@nestjs/cache-manager";
+import { Injectable } from "@nestjs/common";
 import KeyvRedis from "@keyv/redis";
+import { KeyvCacheableMemory } from "cacheable";
 import { Keyv } from "keyv";
 
-CacheModule.registerAsync({
-  useFactory: () => ({
-    stores: [
-      new Keyv({ store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }) }),
-      new KeyvRedis("redis://localhost:6379"),
-    ],
-  }),
-}),
+@Injectable()
+export class CacheService implements CacheOptionsFactory {
+  createCacheOptions(): CacheModuleOptions {
+    return {
+      stores: [
+        new Keyv({
+          store: new KeyvCacheableMemory({ ttl: 60000, lruSize: 5000 }),
+        }),
+        new KeyvRedis(process.env.REDIS_DB_URL ?? "redis://redis:6379"),
+      ],
+    };
+  }
+}
+```
+
+```ts
+// src/cache/cache.module.ts
+import { CacheModule as NestCacheModule } from "@nestjs/cache-manager";
+import { Module } from "@nestjs/common";
+import { CacheService } from "./cache.service";
+
+@Module({
+  imports: [
+    NestCacheModule.registerAsync({
+      useClass: CacheService,
+    }),
+  ],
+  providers: [CacheService],
+  exports: [NestCacheModule],
+})
+export class CacheModule {}
+```
+
+```ts
+// src/app.module.ts
+import { CacheModule } from "./cache/cache.module";
+
+@Module({
+  imports: [DatabaseModule, CacheModule],
+})
 ```
 
 Reads hit the in-memory store first; on a miss, fall through to Redis.
