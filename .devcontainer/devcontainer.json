@@ -4,6 +4,7 @@
   "service": "marketplace-server",
   "workspaceFolder": "/usr/src/app",
   "shutdownAction": "stopCompose",
+  "postStartCommand": "yarn install --frozen-lockfile",
   "remoteUser": "node",
   "forwardPorts": [3001, 5432, 6379],
   "portsAttributes": {
