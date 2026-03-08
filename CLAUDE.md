@@ -28,8 +28,8 @@ NestJS v11 marketplace server (TypeScript, Express). Currently a starter scaffol
 
 ```bash
 yarn install              # Install dependencies
-yarn start:dev            # Dev server with watch mode (port 3000)
-yarn start:debug          # Debug server with --inspect-brk
+yarn start:dev            # Dev server with hot reload
+yarn start:debug          # Debug server with hot reload on port 9229
 yarn build                # Compile to dist/
 yarn start:prod           # Run compiled output
 
