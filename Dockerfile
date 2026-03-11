@@ -35,4 +35,5 @@ COPY --from=production-deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist ./dist
 COPY package.json ./
 USER node
+EXPOSE 3001
 CMD ["node", "dist/src/main.js"]
