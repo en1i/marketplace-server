@@ -27,7 +27,7 @@ RUN yarn build
 FROM base AS production-deps
 ENV NODE_ENV=production
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --production=true && yarn cache clean
+RUN yarn install --frozen-lockfile --production=true --ignore-scripts && yarn cache clean
 
 FROM base AS runner
 ENV NODE_ENV=production

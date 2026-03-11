@@ -21,4 +21,5 @@ services:
       - redis
     ports:
       - "${PORT:-3001}:${PORT:-3001}"
+      - "9229:9229"
     restart: unless-stopped
