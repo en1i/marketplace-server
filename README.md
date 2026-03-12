@@ -40,9 +40,14 @@ $ yarn run start
 # watch mode
 $ yarn run start:dev
 
+# debug watch mode
+$ yarn run start:debug
+
 # production mode
 $ yarn run start:prod
 ```
+
+`start:dev` and `start:debug` use `ts-node-dev` so file changes still reload reliably when the app runs from a bind-mounted container workspace.
 
 ## Run tests
 

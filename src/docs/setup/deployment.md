@@ -16,7 +16,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 ### Dockerfile (multi-stage)
 
 - `base`: Node + Corepack/Yarn bootstrap
-- `deps`: installs full dependencies as the `node` user so dev-time Prisma generation can write inside `node_modules`
+- `deps`: installs full dependencies as the `node` user
 - `dev`: developer image (`yarn start:dev`, git + ssh client available)
 - `build`: compiles NestJS into `dist/`
 - `production-deps`: production-only dependencies
@@ -33,7 +33,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 - Redis URL is configured via `REDIS_DB_URL` environment variable
 - PostgreSQL URL is configured via `DATABASE_URL` environment variable
 - Cache uses in-memory L1 + Redis L2
-- Prisma client generation is automated in execution hooks (`prebuild`, `prestart:dev`, `pretest:e2e`) to avoid clean-build/runtime failures when local generated files are absent
+- Database access uses a shared `pg` pool wrapped by Drizzle ORM; schema changes are managed through Drizzle Kit scripts
 
 ## Deploy The App (Onboarding Steps)
 
@@ -119,4 +119,10 @@ For local development in VS Code Dev Containers, the project uses:
 - `DATABASE_URL`
 - `REDIS_DB_URL`
 
+`NODE_ENV` remains in `.env.dev` as the developer-edited runtime value for the app, even though the Docker `dev` stage also sets `NODE_ENV=development` as an image default.
+
+`PORT` is used by the Nest app and by `compose.dev.yml` host publishing for `marketplace-server`. When running Compose manually and you want the published host port to follow `.env.dev`, use `docker compose --env-file .env.dev -f compose.dev.yml ...` so Compose variable interpolation sees the same `PORT` value.
+
 This path is for development only and should not replace production deployment commands above.
+
+Both `yarn start:dev` and `yarn start:debug` use `ts-node-dev` so hot reload remains reliable when the source tree is bind-mounted into the container from the host or a parent workspace.

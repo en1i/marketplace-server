@@ -1,39 +1,45 @@
-# PostgreSQL + Prisma Setup
+# PostgreSQL + Drizzle Setup
 
-This document summarizes how PostgreSQL was integrated in this project, why Prisma was selected, and why build hooks were added.
+This document summarizes how PostgreSQL is integrated in this project using Drizzle ORM and the `pg` driver.
 
 ## What Was Added
 
 - PostgreSQL service in Compose:
   - Production compose: [`compose.yml`](../../../compose.yml)
   - Development compose: [`compose.dev.yml`](../../../compose.dev.yml)
-- Prisma setup under `src/prisma/`:
-  - [`schema.prisma`](../../../src/prisma/schema.prisma)
-  - [`prisma.service.ts`](../../../src/prisma/prisma.service.ts)
-  - [`prisma.module.ts`](../../../src/prisma/prisma.module.ts)
-- `PrismaModule` imported in app root module:
+- Drizzle runtime setup under `src/db/`:
+  - [`db.service.ts`](../../../src/db/db.service.ts)
+  - [`db.module.ts`](../../../src/db/db.module.ts)
+  - [`schema.ts`](../../../src/db/schema.ts)
+- Drizzle Kit config at repo root:
+  - [`drizzle.config.ts`](../../../drizzle.config.ts)
+- `DatabaseModule` imported in app root module:
   - [`app.module.ts`](../../../src/app.module.ts)
 
 ## Packages
 
 ```bash
-yarn add prisma @prisma/client @prisma/adapter-pg
+yarn add drizzle-orm pg
+yarn add -D drizzle-kit @types/pg
 ```
 
 | Package | Role |
 |---|---|
-| `prisma` | CLI for schema, generate, and migrations |
-| `@prisma/client` | Prisma runtime dependency |
-| `@prisma/adapter-pg` | PostgreSQL driver adapter for Prisma |
+| `drizzle-orm` | Runtime ORM and type-safe query builder |
+| `pg` | PostgreSQL driver and connection pool |
+| `drizzle-kit` | Schema diffing and SQL migration tooling |
+| `@types/pg` | TypeScript types for the PostgreSQL driver |
 
 ## Runtime Configuration
 
-Prisma service uses PostgreSQL connection from `DATABASE_URL`:
+Database service uses PostgreSQL connection from `DATABASE_URL` and wraps a shared `pg` pool with Drizzle:
 
 ```ts
-const adapter = new PrismaPg({
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+const db = drizzle({ client: pool, schema });
 ```
 
 Main environment variables used:
@@ -43,36 +49,25 @@ Main environment variables used:
 - `POSTGRES_PASSWORD`
 - `POSTGRES_DB`
 
-## Why Prisma ORM
+## Why Drizzle ORM
 
-Prisma was chosen for:
+Drizzle was selected for:
 
-- Strong TypeScript support and typed query API
-- Predictable schema-based workflow
-- Good fit with NestJS service/module DI structure
-- Clear separation between schema, generated client, and runtime service
+- Strong TypeScript support without runtime client generation
+- Explicit PostgreSQL driver usage through `pg`
+- Simpler build/lint/test flows in clean checkouts and CI
+- Good fit for an early-stage NestJS service where schema and query patterns are still evolving
 
-## Why Build Hooks Are Needed
+## Migration Workflow
 
-This project currently imports Prisma client from local generated output:
+This project uses Drizzle Kit for schema-driven SQL migrations via scripts in [`package.json`](../../../package.json):
 
-```ts
-import { PrismaClient } from "./generated/client";
-```
+- `db:generate` -> generate SQL migrations from `src/db/schema.ts`
+- `db:migrate` -> apply pending migrations using `drizzle.config.ts`
 
-Generated files are not a source-of-truth implementation and may be missing in a clean checkout/container unless generation runs first.
-
-To avoid failures in those cases, generation is automated with hooks in [`package.json`](../../../package.json):
-
-- `prebuild` -> run `prisma generate` before `yarn build`
-- `prestart:dev` -> run `prisma generate` before `yarn start:dev`
-- `pretest:e2e` -> run `prisma generate` before `yarn test:e2e`
-
-Container build uses the same `prebuild` hook in the Docker `build` stage, where a non-production fallback `DATABASE_URL` is set only for generation/compilation.
-
-This guarantees Prisma client exists before TypeScript compilation in local/dev/CI/container flows.
+Because Drizzle does not require a generated runtime client, app build and startup flows do not need ORM-specific prebuild hooks.
 
 ## Related Files
 
-- Prisma config: [`prisma.config.ts`](../../../prisma.config.ts)
+- Drizzle config: [`drizzle.config.ts`](../../../drizzle.config.ts)
 - Deployment notes: [`deployment.md`](./deployment.md)

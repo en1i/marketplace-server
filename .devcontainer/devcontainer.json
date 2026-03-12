@@ -4,8 +4,9 @@
   "service": "marketplace-server",
   "workspaceFolder": "/usr/src/app",
   "shutdownAction": "stopCompose",
+  "postStartCommand": "yarn install --frozen-lockfile",
   "remoteUser": "node",
-  "forwardPorts": [3001, 5432, 6379],
+  "forwardPorts": [3001, 5432, 6379, 9229],
   "portsAttributes": {
     "3001": {
       "label": "Marketplace API"
@@ -15,6 +16,9 @@
     },
     "6379": {
       "label": "Redis"
+    },
+    "9229": {
+      "label": "Node Inspector"
     }
   },
   "customizations": {
