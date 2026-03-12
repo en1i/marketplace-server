@@ -12,6 +12,7 @@ services:
     restart: unless-stopped
 
   marketplace-server:
+    init: true
     build:
       context: .
       dockerfile: Dockerfile

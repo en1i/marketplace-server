@@ -1,5 +1,6 @@
 services:
   marketplace-server:
+    init: true
     volumes:
       - .:/usr/src/app:cached
       - marketplace-server-node_modules:/usr/src/app/node_modules
