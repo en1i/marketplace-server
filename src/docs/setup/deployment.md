@@ -9,7 +9,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 - Consistent environments across local/dev/prod workflows
 - Smaller production images (build tooling excluded from runtime image)
 - Safer runtime defaults (`NODE_ENV=production`, non-root runtime user)
-- Faster local development in container (bind mount + watch mode + Redis service)
+- Faster local development in container (bind mount + watch mode + local Postgres/Redis services)
 
 ## What Changed
 
@@ -57,14 +57,11 @@ Create an env file outside Git (for example `/opt/marketplace/.env.prod`) and pr
 PORT=<APP_PORT>
 REDIS_DB_URL=<REDIS_URL>
 DATABASE_URL=<POSTGRES_CONNECTION_URL>
-POSTGRES_PASSWORD=<password>
 ```
 
 Optional overrides:
 
 - `NODE_ENV` (defaults to `production`)
-- `POSTGRES_USER`
-- `POSTGRES_DB`
 
 ### 4. Start production stack
 
@@ -75,8 +72,9 @@ docker compose --env-file /opt/marketplace/.env.prod -f compose.yml up -d --buil
 This starts:
 
 - `marketplace-server` using `PORT`
-- `postgres` using `POSTGRES_*` variables (internal compose network)
 - `redis` using `REDIS_DB_URL`
+
+Production `compose.yml` expects `DATABASE_URL` to point at an external PostgreSQL instance such as AWS Lightsail managed PostgreSQL. Local PostgreSQL remains in [`compose.dev.yml`](../../../compose.dev.yml) for development only.
 
 ### 5. Verify deployment
 
@@ -113,9 +111,6 @@ For local development in VS Code Dev Containers, the project uses:
 
 - `NODE_ENV`
 - `PORT`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_DB`
 - `DATABASE_URL`
 - `REDIS_DB_URL`
 
