@@ -4,9 +4,10 @@ This document summarizes how PostgreSQL is integrated in this project using Driz
 
 ## What Was Added
 
-- PostgreSQL service in Compose:
-  - Production compose: [`compose.yml`](../../../compose.yml)
+- PostgreSQL integration through `DATABASE_URL`
+- Local PostgreSQL service in development compose:
   - Development compose: [`compose.dev.yml`](../../../compose.dev.yml)
+- Production PostgreSQL is expected to be provided externally through environment configuration
 - Drizzle runtime setup under `src/db/`:
   - [`db.service.ts`](../../../src/db/db.service.ts)
   - [`db.module.ts`](../../../src/db/db.module.ts)
@@ -23,12 +24,12 @@ yarn add drizzle-orm pg
 yarn add -D drizzle-kit @types/pg
 ```
 
-| Package | Role |
-|---|---|
-| `drizzle-orm` | Runtime ORM and type-safe query builder |
-| `pg` | PostgreSQL driver and connection pool |
-| `drizzle-kit` | Schema diffing and SQL migration tooling |
-| `@types/pg` | TypeScript types for the PostgreSQL driver |
+| Package       | Role                                       |
+| ------------- | ------------------------------------------ |
+| `drizzle-orm` | Runtime ORM and type-safe query builder    |
+| `pg`          | PostgreSQL driver and connection pool      |
+| `drizzle-kit` | Schema diffing and SQL migration tooling   |
+| `@types/pg`   | TypeScript types for the PostgreSQL driver |
 
 ## Runtime Configuration
 
@@ -45,9 +46,6 @@ const db = drizzle({ client: pool, schema });
 Main environment variables used:
 
 - `DATABASE_URL`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_DB`
 
 ## Why Drizzle ORM
 
