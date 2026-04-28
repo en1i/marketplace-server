@@ -32,5 +32,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  # These volumes persist data for dev services.
+  # To remove them and start fresh, run `docker-compose down -v`.
   postgres-data:
   redis-data:
