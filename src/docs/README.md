@@ -7,6 +7,7 @@ When a change touches behavior, setup, configuration, or workflow already descri
 - [Git Hooks Setup](./setup/git-hooks.md)
 - [Redis Cache — in-memory L1 + Redis L2 store](./setup/redis-cache.md)
 - [PostgreSQL + Drizzle Setup — ORM integration and migration workflow](./setup/postgresql.md)
+- [AWS S3 Image Storage — upload, presign, and delete via S3](./setup/s3-storage.md)
 - [Deployment Setup — Docker, Compose, and onboarding steps](./setup/deployment.md)
 
 ## Features
