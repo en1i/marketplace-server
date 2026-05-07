@@ -17,6 +17,31 @@ This document summarizes how PostgreSQL is integrated in this project using Driz
 - `DatabaseModule` imported in app root module:
   - [`app.module.ts`](../../../src/app.module.ts)
 
+## Local Development Setup
+
+PostgreSQL is installed directly on the host machine (not containerized). The app container reaches it via `host.docker.internal`.
+
+Install via snap:
+
+```bash
+sudo snap install postgresql --channel=16/stable
+```
+
+One-time configuration after install:
+
+```bash
+# Set password for the postgres user
+sudo snap run --shell postgresql.postgresql -c "psql -U postgres -c \"ALTER USER postgres WITH PASSWORD 'postgres_password';\""
+
+# Create the database
+psql -U postgres -h localhost -p 5432 -c "CREATE DATABASE marketplace;"
+
+# Apply migrations
+yarn db:migrate
+```
+
+`DATABASE_URL` in `.env.dev` uses `host.docker.internal` as the host so it works both inside the app container (resolved via `extra_hosts: host-gateway`) and directly on the host (add `127.0.0.1 host.docker.internal` to `/etc/hosts` if running outside Docker).
+
 ## Packages
 
 ```bash
