@@ -6,13 +6,10 @@
   "shutdownAction": "stopCompose",
   "postStartCommand": "yarn install --frozen-lockfile",
   "remoteUser": "node",
-  "forwardPorts": [3001, 5432, 6379, 9229],
+  "forwardPorts": [3001, 6379, 9229],
   "portsAttributes": {
     "3001": {
       "label": "Marketplace API"
-    },
-    "5432": {
-      "label": "Postgres"
     },
     "6379": {
       "label": "Redis"

@@ -1,4 +1,4 @@
-FROM node:22-slim AS base
+FROM node:24.15-slim AS base
 WORKDIR /usr/src/app
 RUN corepack enable && corepack prepare yarn@1.22.22 --activate
 

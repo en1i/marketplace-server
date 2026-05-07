@@ -9,7 +9,7 @@ The project now uses a multi-stage Docker and split compose setup to achieve:
 - Consistent environments across local/dev/prod workflows
 - Smaller production images (build tooling excluded from runtime image)
 - Safer runtime defaults (`NODE_ENV=production`, non-root runtime user)
-- Faster local development in container (bind mount + watch mode + local Postgres/Redis services)
+- Faster local development in container (bind mount + watch mode + Redis service)
 
 ## What Changed
 
@@ -74,7 +74,7 @@ This starts:
 - `marketplace-server` using `PORT`
 - `redis` using `REDIS_DB_URL`
 
-Production `compose.yml` expects `DATABASE_URL` to point at an external PostgreSQL instance such as AWS Lightsail managed PostgreSQL. Local PostgreSQL remains in [`compose.dev.yml`](../../../compose.dev.yml) for development only.
+Production `compose.yml` expects `DATABASE_URL` to point at the PostgreSQL instance installed directly on the Hostinger VPS. Development also expects `DATABASE_URL` to point at a locally installed PostgreSQL instance on the host machine — Postgres is not included in the compose stack in either environment.
 
 ### 5. Verify deployment
 
@@ -113,6 +113,10 @@ For local development in VS Code Dev Containers, the project uses:
 - `PORT`
 - `DATABASE_URL`
 - `REDIS_DB_URL`
+- `AWS_S3_BUCKET`
+- `AWS_S3_REGION`
+- `AWS_S3_KEY`
+- `AWS_S3_SECRET`
 
 `NODE_ENV` remains in `.env.dev` as the developer-edited runtime value for the app, even though the Docker `dev` stage also sets `NODE_ENV=development` as an image default.
 

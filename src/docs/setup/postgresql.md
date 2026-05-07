@@ -5,9 +5,9 @@ This document summarizes how PostgreSQL is integrated in this project using Driz
 ## What Was Added
 
 - PostgreSQL integration through `DATABASE_URL`
-- Local PostgreSQL service in development compose:
-  - Development compose: [`compose.dev.yml`](../../../compose.dev.yml)
-- Production PostgreSQL is expected to be provided externally through environment configuration
+- PostgreSQL is expected to be provided externally in all environments through `DATABASE_URL`:
+  - Development: a locally installed PostgreSQL instance on the host machine
+  - Production: PostgreSQL installed directly on the Hostinger VPS
 - Drizzle runtime setup under `src/db/`:
   - [`db.service.ts`](../../../src/db/db.service.ts)
   - [`db.module.ts`](../../../src/db/db.module.ts)
