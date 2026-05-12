@@ -60,9 +60,9 @@ NestJS conventions: modules in `*.module.ts`, controllers in `*.controller.ts`, 
 
 ### Internal Docs
 
-Project documentation lives in `src/docs/`. When a task touches a topic covered there (setup, configuration, features, troubleshooting), read the relevant doc before implementing.
+Project documentation lives in `docs/`. When a task touches a topic covered there (setup, configuration, features, troubleshooting), read the relevant doc before implementing.
 
-→ [src/docs/README.md](src/docs/README.md) — index of all docs
+→ [docs/README.md](docs/README.md) — index of all docs
 
 ### ESLint Rules of Note
 

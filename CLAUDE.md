@@ -10,6 +10,24 @@ This file provides guidance to Gemini Gemini Code Assist (codeassist.google) whe
 
 This file provides guidance to Codex when working with code in this repository.
 
+## Project Context
+
+**Always read [README.md](README.md) alongside this file.** It covers project overview, tech stack, commands, architecture, and an index of all docs — lazy-load individual docs from there only when the task requires it.
+
+**Keep docs in sync with code.** After any change that affects documented behavior (components, architecture, commands, design system, deployment), recheck the relevant doc files and update them in the same change.
+
+## Synchronization Policy
+
+**CRITICAL**: This codebase uses 3 AI assistants. When adding or modifying ANY of the following, ALL related files MUST be updated in the same change:
+
+### 1. Instruction Files (Always sync together)
+
+| File        | AI Assistant       |
+| ----------- | ------------------ |
+| `CLAUDE.md` | Claude Code        |
+| `GEMINI.md` | Gemini Code Assist |
+| `AGENTS.md` | Codex              |
+
 ---
 
 ## Project Overview
@@ -60,9 +78,9 @@ NestJS conventions: modules in `*.module.ts`, controllers in `*.controller.ts`, 
 
 ### Internal Docs
 
-Project documentation lives in `src/docs/`. When a task touches a topic covered there (setup, configuration, features, troubleshooting), read the relevant doc before implementing.
+Project documentation lives in `docs/`. When a task touches a topic covered there (setup, configuration, features, troubleshooting), read the relevant doc before implementing.
 
-→ [src/docs/README.md](src/docs/README.md) — index of all docs
+→ [docs/README.md](docs/README.md) — index of all docs
 
 ### ESLint Rules of Note
 
